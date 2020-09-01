@@ -127,6 +127,51 @@ void DeepDspPrecessionAudioProcessor::prepareToPlay (double sampleRate, int samp
     
     preLowPassFilter.prepare(spec);
     preLowPassFilter.reset();
+    
+    band1.prepare(spec);
+    band1.reset();
+    band2.prepare(spec);
+    band2.reset();
+    band3.prepare(spec);
+    band3.reset();
+    band4.prepare(spec);
+    band4.reset();
+    band5.prepare(spec);
+    band5.reset();
+    band6.prepare(spec);
+    band6.reset();
+    band7.prepare(spec);
+    band7.reset();
+    band8.prepare(spec);
+    band8.reset();
+    band9.prepare(spec);
+    band9.reset();
+    band10.prepare(spec);
+    band10.reset();
+    band11.prepare(spec);
+    band11.reset();
+    band12.prepare(spec);
+    band12.reset();
+    band13.prepare(spec);
+    band13.reset();
+    band14.prepare(spec);
+    band14.reset();
+    band15.prepare(spec);
+    band15.reset();
+    band16.prepare(spec);
+    band16.reset();
+    band17.prepare(spec);
+    band17.reset();
+    band18.prepare(spec);
+    band18.reset();
+    band19.prepare(spec);
+    band19.reset();
+    band20.prepare(spec);
+    band20.reset();
+    band21.prepare(spec);
+    band21.reset();
+    band22.prepare(spec);
+    band22.reset();
 }
 
 void DeepDspPrecessionAudioProcessor::releaseResources()
