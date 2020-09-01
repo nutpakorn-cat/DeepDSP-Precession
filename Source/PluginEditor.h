@@ -25,6 +25,12 @@ public:
     void resized() override;
 
 private:
+    juce::Slider gainSlider;
+    juce::Slider lowSlider;
+    juce::Slider lowMidSlider;
+    juce::Slider highMidSlider;
+    juce::Slider trebleSlider;
+    juce::Slider presenceSlider;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     DeepDspPrecessionAudioProcessor& audioProcessor;

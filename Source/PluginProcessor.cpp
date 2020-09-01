@@ -22,28 +22,33 @@ DeepDspPrecessionAudioProcessor::DeepDspPrecessionAudioProcessor()
     ),
     preHighPassFilter(juce::dsp::IIR::Coefficients<float>::makeHighPass(44100, 29.198f, 0.027f)),
     preLowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 6843.9f, 0.1f)),
-    band1(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 10.081f, 0.437f, -27.55f)),
-    band2(juce::dsp::IIR::Coefficients<float>::makeLowShelf(44100, 16.681f, 1.00f, -3.01f)),
-    band3(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 26.861f, 7.071f, 0.7f)),
-    band4(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 47.406f, 1.363f, 3.47f)),
-    band5(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 81.356f, 10.0f, 0.34f)),
-    band6(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 95.185f, 14.14f, -0.33f)),
-    band7(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 107.82f, 10.0f, -1.57f)),
-    band8(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 149.65f, 10.0f, -0.45f)),
-    band9(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 176.71f, 20.0f, 0.64f)),
-    band10(juce::dsp::IIR::Coefficients<float>::makeHighShelf(44100, 180.73f, 1.0f, -6.17f)),
-    band11(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 328.08f, 20.0f, 0.46)),
-    band12(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 411.37f, 5.946, -0.38)),
-    band13(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 478.18, 0.755, 3.89)),
-    band14(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 506.38, 14.14, 0.84)),
-    band15(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 790.78, 14.14, -0.38)),
-    band16(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 799.93, 1.146, -2.35)),
-    band17(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 1130.4, 12.97, 0.53)),
-    band18(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 1625.1, 14.14, -0.44)),
-    band19(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 2736.6, 5, 0.39)),
-    band20(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 3808.6, 5.946, -0.35)),
-    band21(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 6873.0, 0.884, 2.8)),
-    band22(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 15326, 14.14, 0.39))
+band1(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 10.081f, 0.437f, juce::Decibels::decibelsToGain(-27.55f))),
+    band2(juce::dsp::IIR::Coefficients<float>::makeLowShelf(44100, 16.681f, 1.00f, juce::Decibels::decibelsToGain(-3.01f))),
+    band3(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 26.861f, 7.071f, juce::Decibels::decibelsToGain(0.7f))),
+    band4(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 47.406f, 1.363f, juce::Decibels::decibelsToGain(3.47f))),
+    band5(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 81.356f, 10.0f, juce::Decibels::decibelsToGain(0.34f))),
+    band6(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 95.185f, 14.14f, juce::Decibels::decibelsToGain(-0.33f))),
+    band7(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 107.82f, 10.0f, juce::Decibels::decibelsToGain(-1.57f))),
+    band8(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 149.65f, 10.0f, juce::Decibels::decibelsToGain(-0.45f))),
+    band9(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 176.71f, 20.0f, juce::Decibels::decibelsToGain(0.64f))),
+    band10(juce::dsp::IIR::Coefficients<float>::makeHighShelf(44100, 180.73f, 1.0f, juce::Decibels::decibelsToGain(-6.17f))),
+    band11(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 328.08f, 20.0f, juce::Decibels::decibelsToGain(0.46))),
+    band12(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 411.37f, 5.946, juce::Decibels::decibelsToGain(-0.38))),
+    band13(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 478.18, 0.755, juce::Decibels::decibelsToGain(3.89))),
+    band14(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 506.38, 14.14, juce::Decibels::decibelsToGain(0.84))),
+    band15(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 790.78, 14.14, juce::Decibels::decibelsToGain(-0.38))),
+    band16(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 799.93, 1.146, juce::Decibels::decibelsToGain(-2.35))),
+    band17(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 1130.4, 12.97, juce::Decibels::decibelsToGain(0.53))),
+    band18(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 1625.1, 14.14, juce::Decibels::decibelsToGain(-0.44))),
+    band19(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 2736.6, 5, juce::Decibels::decibelsToGain(0.39))),
+    band20(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 3808.6, 5.946, juce::Decibels::decibelsToGain(-0.35))),
+    band21(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 6873.0, 0.884, juce::Decibels::decibelsToGain(2.8))),
+    band22(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 15326, 14.14, juce::Decibels::decibelsToGain(0.39))),
+    lowEq(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 163.62, 0.509, juce::Decibels::decibelsToGain(-0.49))),
+    lowMidEq(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 455.24, 1.564, juce::Decibels::decibelsToGain(3.78))),
+    highMidEq(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 831.29, 1.00, juce::Decibels::decibelsToGain(-3.44))),
+    trebleEq(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 2815.6, 0.724, juce::Decibels::decibelsToGain(-5.39))),
+    presenceEq(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 5011.7, 1.115, juce::Decibels::decibelsToGain(-2.27)))
 #endif
 {
 }
@@ -172,6 +177,17 @@ void DeepDspPrecessionAudioProcessor::prepareToPlay (double sampleRate, int samp
     band21.reset();
     band22.prepare(spec);
     band22.reset();
+    
+    lowEq.prepare(spec);
+    lowEq.reset();
+    lowMidEq.prepare(spec);
+    lowMidEq.reset();
+    highMidEq.prepare(spec);
+    highMidEq.reset();
+    trebleEq.prepare(spec);
+    trebleEq.reset();
+    presenceEq.prepare(spec);
+    presenceEq.reset();
 }
 
 void DeepDspPrecessionAudioProcessor::releaseResources()
