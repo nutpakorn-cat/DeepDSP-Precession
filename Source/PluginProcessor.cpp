@@ -12,14 +12,38 @@
 //==============================================================================
 DeepDspPrecessionAudioProcessor::DeepDspPrecessionAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       )
+    : AudioProcessor (BusesProperties()
+        #if ! JucePlugin_IsMidiEffect
+        #if ! JucePlugin_IsSynth
+                      .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+        #endif
+                      .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+        #endif
+    ),
+    preHighPassFilter(juce::dsp::IIR::Coefficients<float>::makeHighPass(44100, 29.198f, 0.027f)),
+    preLowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 6843.9f, 0.1f)),
+    band1(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 10.081f, 0.437f, -27.55f)),
+    band2(juce::dsp::IIR::Coefficients<float>::makeLowShelf(44100, 16.681f, 1.00f, -3.01f)),
+    band3(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 26.861f, 7.071f, 0.7f)),
+    band4(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 47.406f, 1.363f, 3.47f)),
+    band5(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 81.356f, 10.0f, 0.34f)),
+    band6(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 95.185f, 14.14f, -0.33f)),
+    band7(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 107.82f, 10.0f, -1.57f)),
+    band8(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 149.65f, 10.0f, -0.45f)),
+    band9(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 176.71f, 20.0f, 0.64f)),
+    band10(juce::dsp::IIR::Coefficients<float>::makeHighShelf(44100, 180.73f, 1.0f, -6.17f)),
+    band11(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 328.08f, 20.0f, 0.46)),
+    band12(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 411.37f, 5.946, -0.38)),
+    band13(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 478.18, 0.755, 3.89)),
+    band14(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 506.38, 14.14, 0.84)),
+    band15(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 790.78, 14.14, -0.38)),
+    band16(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 799.93, 1.146, -2.35)),
+    band17(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 1130.4, 12.97, 0.53)),
+    band18(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 1625.1, 14.14, -0.44)),
+    band19(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 2736.6, 5, 0.39)),
+    band20(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 3808.6, 5.946, -0.35)),
+    band21(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 6873.0, 0.884, 2.8)),
+    band22(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 15326, 14.14, 0.39))
 #endif
 {
 }
@@ -93,8 +117,16 @@ void DeepDspPrecessionAudioProcessor::changeProgramName (int index, const juce::
 //==============================================================================
 void DeepDspPrecessionAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    juce::dsp::ProcessSpec spec;
+    spec.sampleRate = sampleRate;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumOutputChannels();
+    
+    preHighPassFilter.prepare(spec);
+    preHighPassFilter.reset();
+    
+    preLowPassFilter.prepare(spec);
+    preLowPassFilter.reset();
 }
 
 void DeepDspPrecessionAudioProcessor::releaseResources()
@@ -132,28 +164,57 @@ void DeepDspPrecessionAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
+    
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    juce::dsp::AudioBlock<float> bufferBlock(buffer);
+    
+    preHighPassFilter.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    preLowPassFilter.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    
+    float gain = 1000;
+    float clipingPoint = 0.2;
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        for (int sample = 0 ; sample < buffer.getNumSamples() ; ++sample) {
+            
+            channelData[sample] *= gain;
+            
+            if (channelData[sample] > clipingPoint) {
+                channelData[sample] = clipingPoint;
+            }
+            
+            if (channelData[sample] < -clipingPoint) {
+                channelData[sample] = -clipingPoint;
+            }
+        }
     }
+    
+    band1.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band2.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band3.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band4.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band5.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band6.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band7.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band8.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band9.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band10.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band11.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band12.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band13.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band14.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band15.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band16.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band17.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band18.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band19.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band20.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band21.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band22.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
 }
 
 //==============================================================================
