@@ -44,6 +44,7 @@ band1(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 10.081f, 0.437f
     band20(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 3808.6, 5.946, juce::Decibels::decibelsToGain(-0.35))),
     band21(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 6873.0, 0.884, juce::Decibels::decibelsToGain(2.8))),
     band22(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 15326, 14.14, juce::Decibels::decibelsToGain(0.39))),
+    band23(juce::dsp::IIR::Coefficients<float>::makeHighShelf(44100, 18862, 0.3, juce::Decibels::decibelsToGain(-6.49))),
     lowEq(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 163.62, 0.509, juce::Decibels::decibelsToGain(-0.49))),
     lowMidEq(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 455.24, 1.564, juce::Decibels::decibelsToGain(3.78))),
     highMidEq(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 831.29, 1.00, juce::Decibels::decibelsToGain(-3.44))),
@@ -177,6 +178,8 @@ void DeepDspPrecessionAudioProcessor::prepareToPlay (double sampleRate, int samp
     band21.reset();
     band22.prepare(spec);
     band22.reset();
+    band23.prepare(spec);
+    band23.reset();
     
     lowEq.prepare(spec);
     lowEq.reset();
@@ -234,7 +237,6 @@ void DeepDspPrecessionAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     preHighPassFilter.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
     preLowPassFilter.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
     
-    float gain = 1000;
     float clipingPoint = 0.2;
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
@@ -242,7 +244,7 @@ void DeepDspPrecessionAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
         auto* channelData = buffer.getWritePointer (channel);
         for (int sample = 0 ; sample < buffer.getNumSamples() ; ++sample) {
             
-            channelData[sample] *= gain;
+            channelData[sample] *= gainSlider;
             
             if (channelData[sample] > clipingPoint) {
                 channelData[sample] = clipingPoint;
@@ -276,6 +278,19 @@ void DeepDspPrecessionAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     band20.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
     band21.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
     band22.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    band23.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    
+    *lowEq.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 163.62, 0.509, juce::Decibels::decibelsToGain(-0.49 + lowSlider));
+    *lowMidEq.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 455.24, 1.564, juce::Decibels::decibelsToGain(3.78 + lowMidSlider));
+    *highMidEq.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 831.29, 1.00, juce::Decibels::decibelsToGain(-3.44 + highMidSlider));
+    *trebleEq.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 2815.6, 0.724, juce::Decibels::decibelsToGain(-5.39 + trebleSlider));
+    *presenceEq.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 5011.7, 1.115, juce::Decibels::decibelsToGain(-2.27 + presenceSlider));
+    
+    lowEq.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    lowMidEq.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    highMidEq.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    trebleEq.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    presenceEq.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
 }
 
 //==============================================================================

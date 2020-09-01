@@ -14,7 +14,8 @@
 //==============================================================================
 /**
 */
-class DeepDspPrecessionAudioProcessorEditor  : public juce::AudioProcessorEditor
+class DeepDspPrecessionAudioProcessorEditor  : public juce::AudioProcessorEditor,
+public juce::Slider::Listener
 {
 public:
     DeepDspPrecessionAudioProcessorEditor (DeepDspPrecessionAudioProcessor&);
@@ -23,6 +24,8 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void sliderValueChanged(juce::Slider *slider) override;
 
 private:
     juce::Slider gainSlider;

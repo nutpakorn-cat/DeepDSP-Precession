@@ -38,11 +38,19 @@ DeepDspPrecessionAudioProcessorEditor::DeepDspPrecessionAudioProcessorEditor (De
     
     gainSlider.setRange(0, 5000);
     
-    lowSlider.setRange(-5, 5);
-    lowMidSlider.setRange(-5, 5);
-    highMidSlider.setRange(-5, 5);
-    trebleSlider.setRange(-5, 5);
-    presenceSlider.setRange(-5, 5);
+    lowSlider.setRange(-10, 10);
+    lowMidSlider.setRange(-10, 10);
+    highMidSlider.setRange(-10, 10);
+    trebleSlider.setRange(-10, 10);
+    presenceSlider.setRange(-10, 10);
+    
+    gainSlider.setValue(audioProcessor.gainSlider);
+    
+    lowSlider.setValue(audioProcessor.lowSlider);
+    lowMidSlider.setValue(audioProcessor.lowMidSlider);
+    highMidSlider.setValue(audioProcessor.highMidSlider);
+    trebleSlider.setValue(audioProcessor.trebleSlider);
+    presenceSlider.setValue(audioProcessor.presenceSlider);
     
     gainSlider.addListener(this);
     
@@ -83,4 +91,30 @@ void DeepDspPrecessionAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+}
+
+void DeepDspPrecessionAudioProcessorEditor::sliderValueChanged(juce::Slider *slider) {
+    if (slider == &gainSlider) {
+        audioProcessor.gainSlider = slider->getValue();
+    }
+    
+    if (slider == &lowSlider) {
+        audioProcessor.lowSlider = slider->getValue();
+    }
+    
+    if (slider == &lowMidSlider) {
+        audioProcessor.lowMidSlider = slider->getValue();
+    }
+    
+    if (slider == &highMidSlider) {
+        audioProcessor.highMidSlider = slider->getValue();
+    }
+    
+    if (slider == &trebleSlider) {
+        audioProcessor.trebleSlider = slider->getValue();
+    }
+    
+    if (slider == &presenceSlider)  {
+        audioProcessor.presenceSlider = slider->getValue();
+    }
 }
