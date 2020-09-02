@@ -53,13 +53,13 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    float gainSlider = 50;
+    float gainSlider = 798.6104965;
     
-    float lowSlider = 0;
-    float lowMidSlider = 0;
-    float highMidSlider = 0;
-    float trebleSlider = 0;
-    float presenceSlider = 0;
+    float lowSlider = -3.0695635;
+    float lowMidSlider = 5.7338793;
+    float highMidSlider = -4.7494321;
+    float trebleSlider = 4.4115331;
+    float presenceSlider = -1.8259787;
 
 private:
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> preHighPassFilter;
