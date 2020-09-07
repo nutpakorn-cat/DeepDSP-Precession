@@ -96,6 +96,8 @@ DeepDspPrecessionAudioProcessorEditor::DeepDspPrecessionAudioProcessorEditor (De
     highMidSlider.addListener(this);
     trebleSlider.addListener(this);
     presenceSlider.addListener(this);
+    inputSlider.addListener(this);
+    outputSlider.addListener(this);
     
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
