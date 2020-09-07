@@ -243,8 +243,7 @@ void DeepDspPrecessionAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     {
         auto* channelData = buffer.getWritePointer (channel);
         for (int sample = 0 ; sample < buffer.getNumSamples() ; ++sample) {
-            
-            channelData[sample] *= gainSlider;
+            channelData[sample] *= gainSlider * inputSlider;
             
             if (channelData[sample] > clipingPoint) {
                 channelData[sample] = clipingPoint;
@@ -291,6 +290,14 @@ void DeepDspPrecessionAudioProcessor::processBlock (juce::AudioBuffer<float>& bu
     highMidEq.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
     trebleEq.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
     presenceEq.process(juce::dsp::ProcessContextReplacing<float>(bufferBlock));
+    
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    {
+        auto* channelData = buffer.getWritePointer (channel);
+        for (int sample = 0 ; sample < buffer.getNumSamples() ; ++sample) {
+            channelData[sample] *= outputSlider;
+        }
+    }
 }
 
 //==============================================================================
