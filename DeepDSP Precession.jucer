@@ -18,10 +18,10 @@
     </GROUP>
     <FILE id="vgLXJM" name="deep-dsp-background.png" compile="0" resource="1"
           file="Assets/deep-dsp-background.png"/>
-    <FILE id="v49Ccy" name="deep-dsp-amp-knob.png" compile="0" resource="1"
-          file="Assets/deep-dsp-amp-knob.png"/>
     <FILE id="BVPR0D" name="deep-dsp-io-knob.png" compile="0" resource="1"
           file="Assets/deep-dsp-io-knob.png"/>
+    <FILE id="KEg9F9" name="deep-dsp-amp-knob.png" compile="0" resource="1"
+          file="Assets/deep-dsp-amp-knob.png"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
