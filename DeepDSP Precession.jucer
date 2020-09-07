@@ -5,6 +5,9 @@
               jucerFormatVersion="1" companyName="DeepDSP">
   <MAINGROUP id="bI5aPR" name="DeepDSP Precession">
     <GROUP id="{7B815ACA-849C-8043-7DD8-AAD30119273B}" name="Source">
+      <FILE id="ANL3ZR" name="AmplifierKnob.cpp" compile="1" resource="0"
+            file="Source/AmplifierKnob.cpp"/>
+      <FILE id="EDIliO" name="AmplifierKnob.h" compile="0" resource="0" file="Source/AmplifierKnob.h"/>
       <FILE id="e41zIL" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="MCIa96" name="PluginProcessor.h" compile="0" resource="0"
@@ -13,8 +16,12 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="etbTyL" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="lIGbgt" name="background-pink.png" compile="0" resource="1"
-          file="Assets/background-pink.png"/>
+    <FILE id="vgLXJM" name="deep-dsp-background.png" compile="0" resource="1"
+          file="Assets/deep-dsp-background.png"/>
+    <FILE id="v49Ccy" name="deep-dsp-amp-knob.png" compile="0" resource="1"
+          file="Assets/deep-dsp-amp-knob.png"/>
+    <FILE id="BVPR0D" name="deep-dsp-io-knob.png" compile="0" resource="1"
+          file="Assets/deep-dsp-io-knob.png"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

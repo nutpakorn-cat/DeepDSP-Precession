@@ -22,7 +22,7 @@ DeepDspPrecessionAudioProcessor::DeepDspPrecessionAudioProcessor()
     ),
     preHighPassFilter(juce::dsp::IIR::Coefficients<float>::makeHighPass(44100, 29.198f, 0.027f)),
     preLowPassFilter(juce::dsp::IIR::Coefficients<float>::makeLowPass(44100, 6843.9f, 0.1f)),
-band1(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 10.081f, 0.437f, juce::Decibels::decibelsToGain(-27.55f))),
+    band1(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 10.081f, 0.437f, juce::Decibels::decibelsToGain(-27.55f))),
     band2(juce::dsp::IIR::Coefficients<float>::makeLowShelf(44100, 16.681f, 1.00f, juce::Decibels::decibelsToGain(-3.01f))),
     band3(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 26.861f, 7.071f, juce::Decibels::decibelsToGain(0.7f))),
     band4(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 47.406f, 1.363f, juce::Decibels::decibelsToGain(3.47f))),

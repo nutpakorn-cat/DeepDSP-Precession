@@ -9,7 +9,9 @@
 #pragma once
 
 #include <JuceHeader.h>
+
 #include "PluginProcessor.h"
+#include "AmplifierKnob.h"
 
 //==============================================================================
 /**
@@ -28,12 +30,18 @@ public:
     void sliderValueChanged(juce::Slider *slider) override;
 
 private:
+    juce::Slider inputSlider;
+    juce::Slider outputSlider;
+    
     juce::Slider gainSlider;
     juce::Slider lowSlider;
     juce::Slider lowMidSlider;
     juce::Slider highMidSlider;
     juce::Slider trebleSlider;
     juce::Slider presenceSlider;
+    
+    AmplifierKnob amplifierKnob;
+    AmplifierKnob ioKnob;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     DeepDspPrecessionAudioProcessor& audioProcessor;

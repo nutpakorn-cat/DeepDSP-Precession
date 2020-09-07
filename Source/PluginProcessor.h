@@ -60,6 +60,9 @@ public:
     float highMidSlider = -4.7494321;
     float trebleSlider = 4.4115331;
     float presenceSlider = -1.8259787;
+    
+    float inputSlider = 1;
+    float outputSlider = 2;
 
 private:
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> preHighPassFilter;

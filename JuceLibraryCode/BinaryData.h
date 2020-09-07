@@ -8,11 +8,17 @@
 
 namespace BinaryData
 {
-    extern const char*   backgroundpink_png;
-    const int            backgroundpink_pngSize = 2266492;
+    extern const char*   deepdspbackground_png;
+    const int            deepdspbackground_pngSize = 2291330;
+
+    extern const char*   deepdspampknob_png;
+    const int            deepdspampknob_pngSize = 17900;
+
+    extern const char*   deepdspioknob_png;
+    const int            deepdspioknob_pngSize = 4504;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 1;
+    const int namedResourceListSize = 3;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
